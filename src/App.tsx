@@ -1,56 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import { AdminPanel } from './admin/AdminPanel';
-import { BlogDetailModal } from './components/BlogDetailModal';
-import { ConsultationModal } from './components/ConsultationModal';
-import { FloatingContactWidget } from './components/FloatingContactWidget';
-import { Footer } from './components/Footer';
-import { Navbar } from './components/Navbar';
-import { PracticeAreaDetailModal } from './components/PracticeAreaDetailModal';
-import { SubmitReviewModal } from './components/SubmitReviewModal';
+import React, { useEffect, useState } from "react";
+import { AdminPanel } from "./admin/AdminPanel";
+import { BlogDetailModal } from "./components/BlogDetailModal";
+import { ConsultationModal } from "./components/ConsultationModal";
+import { FloatingContactWidget } from "./components/FloatingContactWidget";
+import { Footer } from "./components/Footer";
+import { Navbar } from "./components/Navbar";
+import { PracticeAreaDetailModal } from "./components/PracticeAreaDetailModal";
+import { SubmitReviewModal } from "./components/SubmitReviewModal";
 import {
   initialBlogs,
   initialPracticeAreas,
   initialSiteContent,
   initialTeamMembers,
-  initialTestimonials
-} from './data/initialData';
-import { AboutPage } from './pages/AboutPage';
-import { BlogsPage } from './pages/BlogsPage';
-import { ContactPage } from './pages/ContactPage';
-import { HomePage } from './pages/HomePage';
-import { PracticeAreasPage } from './pages/PracticeAreasPage';
-import { TeamPage } from './pages/TeamPage';
-import { loadSiteData } from './services/storage';
+  initialTestimonials,
+} from "./data/initialData";
+import { AboutPage } from "./pages/AboutPage";
+import { BlogsPage } from "./pages/BlogsPage";
+import { ContactPage } from "./pages/ContactPage";
+import { HomePage } from "./pages/HomePage";
+import { LegalFaqsPage } from "./pages/LegalFaqsPage";
+import { PracticeAreasPage } from "./pages/PracticeAreasPage";
+import { TeamPage } from "./pages/TeamPage";
+import { loadSiteData } from "./services/storage";
 import {
   BlogPost,
   ContactInquiry,
   PracticeArea,
   SiteContent,
   TeamMember,
-  Testimonial
-} from './types';
+  Testimonial,
+} from "./types";
 
 export function App() {
   const [loading, setLoading] = useState(false);
 
   // Core Data initialized with complete legal firm data
   const [content, setContent] = useState<SiteContent>(initialSiteContent);
-  const [practiceAreas, setPracticeAreas] = useState<PracticeArea[]>(initialPracticeAreas);
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(initialTeamMembers);
+  const [practiceAreas, setPracticeAreas] =
+    useState<PracticeArea[]>(initialPracticeAreas);
+  const [teamMembers, setTeamMembers] =
+    useState<TeamMember[]>(initialTeamMembers);
   const [blogs, setBlogs] = useState<BlogPost[]>(initialBlogs);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials);
+  const [testimonials, setTestimonials] =
+    useState<Testimonial[]>(initialTestimonials);
   const [inquiries, setInquiries] = useState<ContactInquiry[]>([]);
 
   // Page Routing & Navigation state
-  const validPages = ['home', 'about', 'practice-areas', 'team', 'blogs', 'contact', 'admin'];
+  const validPages = [
+    "home",
+    "about",
+    "practice-areas",
+    "team",
+    "blogs",
+    "contact",
+    "faqs",
+    "admin",
+  ];
   const getInitialPage = () => {
-    const hash = window.location.hash.replace('#', '');
-    return validPages.includes(hash) ? hash : 'home';
+    const hash = window.location.hash.replace("#", "");
+    return validPages.includes(hash) ? hash : "home";
   };
 
   const initialPage = getInitialPage();
   const [activeSection, setActiveSection] = useState<string>(
-    initialPage === 'admin' ? 'home' : initialPage
+    initialPage === "admin" ? "home" : initialPage,
   );
 
   // Subdomain and path detection for dedicated admin.bodhlawfirm.com.np portal
@@ -60,27 +73,31 @@ export function App() {
     const pathname = window.location.pathname.toLowerCase();
     const search = window.location.search.toLowerCase();
     return (
-      host === 'admin.bodhlawfirm.com.np' ||
-      host.startsWith('admin.') ||
-      hash === '#admin' ||
-      pathname === '/admin' ||
-      pathname.startsWith('/admin/') ||
-      search.includes('admin=true')
+      host === "admin.bodhlawfirm.com.np" ||
+      host.startsWith("admin.") ||
+      hash === "#admin" ||
+      pathname === "/admin" ||
+      pathname.startsWith("/admin/") ||
+      search.includes("admin=true")
     );
   };
 
-  const [isAdminPortalActive, setIsAdminPortalActive] = useState<boolean>(() => checkIsAdminSubdomain());
+  const [isAdminPortalActive, setIsAdminPortalActive] = useState<boolean>(() =>
+    checkIsAdminSubdomain(),
+  );
   const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
-  const [selectedPracticeArea, setSelectedPracticeArea] = useState<PracticeArea | null>(null);
+  const [selectedPracticeArea, setSelectedPracticeArea] =
+    useState<PracticeArea | null>(null);
   const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null);
-  const [consultationPrefillArea, setConsultationPrefillArea] = useState<string>('');
+  const [consultationPrefillArea, setConsultationPrefillArea] =
+    useState<string>("");
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   // Synchronize hash & listen for partner shortcut (Ctrl+Shift+A)
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (hash === 'admin') {
+      const hash = window.location.hash.replace("#", "");
+      if (hash === "admin") {
         setIsAdminPortalActive(true);
       } else if (validPages.includes(hash)) {
         setIsAdminPortalActive(false);
@@ -90,17 +107,20 @@ export function App() {
 
     // Secret Chambers Partner keyboard shortcut (Ctrl+Shift+A or Alt+A) to access admin portal
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') || (e.altKey && e.key.toLowerCase() === 'a')) {
+      if (
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "a") ||
+        (e.altKey && e.key.toLowerCase() === "a")
+      ) {
         e.preventDefault();
-        setIsAdminPortalActive(prev => !prev);
+        setIsAdminPortalActive((prev) => !prev);
       }
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
@@ -115,7 +135,7 @@ export function App() {
       setTestimonials(data.testimonials);
       setInquiries(data.inquiries);
     } catch (err) {
-      console.error('Failed to load law firm site data:', err);
+      console.error("Failed to load law firm site data:", err);
     } finally {
       setLoading(false);
     }
@@ -126,19 +146,21 @@ export function App() {
   }, []);
 
   const handleNavigate = (pageId: string) => {
-    const target = validPages.includes(pageId) ? pageId : 'home';
+    const target = validPages.includes(pageId) ? pageId : "home";
     setActiveSection(target);
     window.location.hash = target;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleOpenConsultation = (areaTitle?: string) => {
-    setConsultationPrefillArea(areaTitle || '');
+    setConsultationPrefillArea(areaTitle || "");
     setIsConsultationModalOpen(true);
   };
 
   const handleConsultMember = (member: TeamMember) => {
-    setConsultationPrefillArea(`Consultation with ${member.name} (${member.role})`);
+    setConsultationPrefillArea(
+      `Consultation with ${member.name} (${member.role})`,
+    );
     setIsConsultationModalOpen(true);
   };
 
@@ -150,7 +172,9 @@ export function App() {
           <p className="text-xs uppercase tracking-[0.25em] text-[#c5a059] font-medium font-serif">
             BODH LAW FIRM NEPAL
           </p>
-          <p className="text-xs text-[#7d796f]">Loading legal counsel repository...</p>
+          <p className="text-xs text-[#7d796f]">
+            Loading legal counsel repository...
+          </p>
         </div>
       </div>
     );
@@ -168,11 +192,11 @@ export function App() {
         inquiries={inquiries}
         onRefreshData={fetchData}
         onClose={() => {
-          if (window.location.hostname === 'admin.bodhlawfirm.com.np') {
-            window.location.href = 'https://bodhlawfirm.com.np';
+          if (window.location.hostname === "admin.bodhlawfirm.com.np") {
+            window.location.href = "https://bodhlawfirm.com.np";
           } else {
             setIsAdminPortalActive(false);
-            if (window.location.hash === '#admin') {
+            if (window.location.hash === "#admin") {
               window.location.hash = activeSection;
             }
           }
@@ -194,7 +218,7 @@ export function App() {
 
         {/* Dedicated Page Views */}
         <main>
-          {activeSection === 'home' && (
+          {activeSection === "home" && (
             <HomePage
               content={content}
               practiceAreas={practiceAreas}
@@ -210,7 +234,7 @@ export function App() {
             />
           )}
 
-          {activeSection === 'about' && (
+          {activeSection === "about" && (
             <AboutPage
               content={content}
               teamMembers={teamMembers}
@@ -219,16 +243,18 @@ export function App() {
             />
           )}
 
-          {activeSection === 'practice-areas' && (
+          {activeSection === "practice-areas" && (
             <PracticeAreasPage
               practiceAreas={practiceAreas}
               onSelectArea={(area) => setSelectedPracticeArea(area)}
-              onConsultPracticeArea={(area) => handleOpenConsultation(area.title)}
+              onConsultPracticeArea={(area) =>
+                handleOpenConsultation(area.title)
+              }
               onNavigate={handleNavigate}
             />
           )}
 
-          {activeSection === 'team' && (
+          {activeSection === "team" && (
             <TeamPage
               teamMembers={teamMembers}
               onConsultMember={handleConsultMember}
@@ -236,7 +262,7 @@ export function App() {
             />
           )}
 
-          {activeSection === 'blogs' && (
+          {activeSection === "blogs" && (
             <BlogsPage
               blogs={blogs}
               onReadBlog={(blog) => setSelectedBlog(blog)}
@@ -245,12 +271,19 @@ export function App() {
             />
           )}
 
-          {activeSection === 'contact' && (
+          {activeSection === "contact" && (
             <ContactPage
               contactInfo={content.contactInfo}
               practiceAreas={practiceAreas}
               prefilledPracticeArea={consultationPrefillArea}
               onNavigate={handleNavigate}
+            />
+          )}
+
+          {activeSection === "faqs" && (
+            <LegalFaqsPage
+              onNavigate={handleNavigate}
+              onOpenConsultation={() => handleOpenConsultation()}
             />
           )}
         </main>
@@ -293,7 +326,9 @@ export function App() {
         <BlogDetailModal
           blog={selectedBlog}
           onClose={() => setSelectedBlog(null)}
-          onBookConsultation={() => handleOpenConsultation(selectedBlog.category)}
+          onBookConsultation={() =>
+            handleOpenConsultation(selectedBlog.category)
+          }
         />
       )}
 

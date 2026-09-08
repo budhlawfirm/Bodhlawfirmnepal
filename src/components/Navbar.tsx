@@ -1,14 +1,7 @@
-import {
-  Clock,
-  Mail,
-  Menu,
-  Phone,
-  ShieldCheck,
-  X
-} from 'lucide-react';
-import React, { useState } from 'react';
-import { ContactInfo } from '../types';
-import { BodhLogo } from './BodhLogo';
+import { Clock, Mail, Menu, Phone, ShieldCheck, X } from "lucide-react";
+import React, { useState } from "react";
+import { ContactInfo } from "../types";
+import { BodhLogo } from "./BodhLogo";
 
 interface NavbarProps {
   contactInfo: ContactInfo;
@@ -21,17 +14,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   contactInfo,
   activeSection,
   onNavigate,
-  onOpenConsultationModal
+  onOpenConsultationModal,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About Us' },
-    { id: 'practice-areas', label: 'Practice Areas' },
-    { id: 'team', label: 'Our Team' },
-    { id: 'blogs', label: 'Blogs' },
-    { id: 'contact', label: 'Contact Us' }
+    { id: "home", label: "Home" },
+    { id: "about", label: "About Us" },
+    { id: "practice-areas", label: "Practice Areas" },
+    { id: "team", label: "Our Team" },
+    { id: "blogs", label: "Blogs" },
+    { id: "contact", label: "Contact Us" },
   ];
 
   const handleLinkClick = (id: string) => {
@@ -80,21 +73,18 @@ export const Navbar: React.FC<NavbarProps> = ({
       <nav className="bg-[#080808]/95 backdrop-blur-md border-b border-[#24211a] px-4 sm:px-8 py-3.5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Brand Logo */}
-          <BodhLogo
-            size="md"
-            onClick={() => handleLinkClick('home')}
-          />
+          <BodhLogo size="md" onClick={() => handleLinkClick("home")} />
 
           {/* Desktop Nav Items */}
           <div className="hidden lg:flex items-center gap-8 text-[13.5px] font-normal tracking-wide text-[#b8b3a7]">
-            {navLinks.map(link => {
+            {navLinks.map((link) => {
               const isActive = activeSection === link.id;
               return (
                 <button
                   key={link.id}
                   onClick={() => handleLinkClick(link.id)}
                   className={`relative py-1 transition-colors hover:text-[#f3ece0] ${
-                    isActive ? 'text-[#c5a059] font-medium' : ''
+                    isActive ? "text-[#c5a059] font-medium" : ""
                   }`}
                   id={`nav-link-${link.id}`}
                 >
@@ -126,7 +116,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               id="btn-mobile-menu-toggle"
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -134,14 +128,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="lg:hidden mt-3 pt-3 border-t border-[#24211a] flex flex-col gap-2 pb-4 animate-in fade-in duration-200">
-            {navLinks.map(link => (
+            {navLinks.map((link) => (
               <button
                 key={link.id}
                 onClick={() => handleLinkClick(link.id)}
                 className={`text-left px-3 py-2 text-sm font-medium rounded transition-colors ${
                   activeSection === link.id
-                    ? 'text-[#c5a059] bg-[#1a1711]'
-                    : 'text-[#b8b3a7] hover:text-white hover:bg-[#12100a]'
+                    ? "text-[#c5a059] bg-[#1a1711]"
+                    : "text-[#b8b3a7] hover:text-white hover:bg-[#12100a]"
                 }`}
               >
                 {link.label}

@@ -5,12 +5,11 @@ import {
   Mail,
   MapPin,
   MessageSquare,
-  Phone
-} from 'lucide-react';
-import React from 'react';
-import { ContactInfo, PracticeArea } from '../types';
-import { BodhLogo } from './BodhLogo';
-import { FaqSection } from './FaqSection';
+  Phone,
+} from "lucide-react";
+import React from "react";
+import { ContactInfo, PracticeArea } from "../types";
+import { BodhLogo } from "./BodhLogo";
 
 interface FooterProps {
   contactInfo: ContactInfo;
@@ -23,27 +22,22 @@ export const Footer: React.FC<FooterProps> = ({
   contactInfo,
   practiceAreas,
   onNavigate,
-  onOpenConsultation
+  onOpenConsultation,
 }) => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <footer className="bg-[#050505] border-t border-[#24211a] text-[#a39f93]">
-      {/* Comprehensive Legal Knowledge Base & FAQ Section for Public Clients & SEO */}
-      <FaqSection
-        onOpenConsultation={onOpenConsultation}
-        onNavigate={onNavigate}
-      />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-8 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-14 border-b border-[#1c1913]">
           {/* Brand Info */}
           <div className="lg:col-span-4 space-y-4">
-            <BodhLogo size="md" onClick={() => onNavigate('home')} />
+            <BodhLogo size="md" onClick={() => onNavigate("home")} />
             <p className="text-xs text-[#8c887d] leading-relaxed max-w-sm pt-2">
-              Bodh Law Firm Nepal is committed to providing reliable, result-oriented and cost-effective legal services across Nepal.
+              Bodh Law Firm Nepal is committed to providing reliable,
+              result-oriented and cost-effective legal services across Nepal.
             </p>
 
             {/* Social & Direct Contact Icons */}
@@ -106,7 +100,7 @@ export const Footer: React.FC<FooterProps> = ({
             <ul className="space-y-2.5 text-xs text-[#8c887d]">
               <li>
                 <button
-                  onClick={() => onNavigate('home')}
+                  onClick={() => onNavigate("home")}
                   className="hover:text-[#f3ece0] transition-colors"
                 >
                   Home
@@ -114,7 +108,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('about')}
+                  onClick={() => onNavigate("about")}
                   className="hover:text-[#f3ece0] transition-colors"
                 >
                   About Us
@@ -122,7 +116,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('practice-areas')}
+                  onClick={() => onNavigate("practice-areas")}
                   className="hover:text-[#f3ece0] transition-colors"
                 >
                   Practice Areas
@@ -130,7 +124,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('team')}
+                  onClick={() => onNavigate("team")}
                   className="hover:text-[#f3ece0] transition-colors"
                 >
                   Our Team
@@ -138,7 +132,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('blogs')}
+                  onClick={() => onNavigate("blogs")}
                   className="hover:text-[#f3ece0] transition-colors"
                 >
                   Blogs & Insights
@@ -146,20 +140,22 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('contact')}
+                  onClick={() => onNavigate("contact")}
                   className="hover:text-[#f3ece0] transition-colors"
                 >
                   Contact Us
                 </button>
               </li>
               <li>
-                <a
-                  href="#faq"
+                <button
+                  onClick={() => onNavigate("faqs")}
                   className="text-[#c5a059] hover:underline transition-colors flex items-center gap-1"
                 >
                   <span>Legal FAQs</span>
-                  <span className="text-[10px] bg-[#241f16] px-1 py-0.2 border border-[#c5a059]/40 rounded">Nepal Law</span>
-                </a>
+                  <span className="text-[10px] bg-[#241f16] px-1 py-0.2 border border-[#c5a059]/40 rounded">
+                    Nepal Law
+                  </span>
+                </button>
               </li>
             </ul>
           </div>
@@ -173,7 +169,7 @@ export const Footer: React.FC<FooterProps> = ({
               {practiceAreas.slice(0, 6).map((pa) => (
                 <li key={pa.id}>
                   <button
-                    onClick={() => onNavigate('practice-areas')}
+                    onClick={() => onNavigate("practice-areas")}
                     className="hover:text-[#f3ece0] transition-colors text-left"
                   >
                     {pa.title}
@@ -231,12 +227,21 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom copyright & legal bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#636056] gap-4">
-          <p>© 2026 Bodh Law Firm Nepal (bodhlawfirm.com.np). All Rights Reserved.</p>
+          <p>
+            © 2026 Bodh Law Firm Nepal (bodhlawfirm.com.np). All Rights
+            Reserved.
+          </p>
 
           <div className="flex items-center gap-6">
-            <span className="hover:text-[#9e9a8f] cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-[#9e9a8f] cursor-pointer">Terms of Practice</span>
-            <span className="hover:text-[#9e9a8f] cursor-pointer">Nepal Bar Council Ethics</span>
+            <span className="hover:text-[#9e9a8f] cursor-pointer">
+              Privacy Policy
+            </span>
+            <span className="hover:text-[#9e9a8f] cursor-pointer">
+              Terms of Practice
+            </span>
+            <span className="hover:text-[#9e9a8f] cursor-pointer">
+              Nepal Bar Council Ethics
+            </span>
             <button
               onClick={scrollToTop}
               className="p-2 rounded bg-[#12100d] border border-[#2e2a22] text-[#c5a059] hover:text-white cursor-pointer"
