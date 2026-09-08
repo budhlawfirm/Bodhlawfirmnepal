@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Homepage -->
+  <url>
+    <loc>https://bodhlawfirm.com.np/</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ne" href="https://bodhlawfirm.com.np/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bodhlawfirm.com.np/" />
+  </url>
+
+  <!-- About Us -->
+  <url>
+    <loc>https://bodhlawfirm.com.np/#about</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Legal Practice Areas -->
+  <url>
+    <loc>https://bodhlawfirm.com.np/#practice-areas</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- Legal Advocates & Team -->
+  <url>
+    <loc>https://bodhlawfirm.com.np/#team</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Legal Insights & Precedents / Blogs -->
+  <url>
+    <loc>https://bodhlawfirm.com.np/#blogs</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Contact & Chambers Location (Putalisadak Kathmandu) -->
+  <url>
+    <loc>https://bodhlawfirm.com.np/#contact</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Legal FAQs Knowledge Base -->
+  <url>
+    <loc>https://bodhlawfirm.com.np/#faq</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+
+  <!-- AI Models & LLM Standards (ChatGPT, Claude, Gemini) -->
+  <url>
+    <loc>https://bodhlawfirm.com.np/llms.txt</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

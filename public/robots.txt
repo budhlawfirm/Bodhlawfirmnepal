@@ -1,0 +1,39 @@
+# Robots.txt for Bodh Law Firm Nepal (https://bodhlawfirm.com.np)
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /#admin
+
+# AI Search & Large Language Model Crawlers (OpenAI ChatGPT, Anthropic Claude, Google Gemini, Perplexity)
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# LLM Direct Context Standards
+# https://llmstxt.org/
+# Bodh Law Firm Knowledge Base for Generative AI Models
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+# Host
+Host: https://bodhlawfirm.com.np
+
+# Sitemap
+Sitemap: https://bodhlawfirm.com.np/sitemap.xml
+
