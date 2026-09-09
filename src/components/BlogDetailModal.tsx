@@ -110,49 +110,86 @@ export const BlogDetailModal: React.FC<BlogDetailModalProps> = ({
             </div>
           </div>
 
-          {/* Render Markdown-like paragraphs */}
-          <div className="space-y-4 text-sm text-[#b8b3a7] leading-relaxed">
-            {blog.content.split('\n\n').map((paragraph, pIdx) => {
-              if (paragraph.startsWith('### ')) {
-                return (
-                  <h3 key={pIdx} className="font-serif text-lg text-[#f3ece0] pt-2">
-                    {paragraph.replace('### ', '')}
-                  </h3>
-                );
-              }
-              if (paragraph.startsWith('1. ') || paragraph.startsWith('2. ') || paragraph.startsWith('3. ')) {
-                return (
-                  <p key={pIdx} className="pl-4 border-l-2 border-[#c5a059]/50 py-0.5 text-xs sm:text-sm">
-                    {paragraph}
-                  </p>
-                );
-              }
-              if (paragraph.startsWith('- ')) {
-                return (
-                  <p key={pIdx} className="pl-4 border-l border-[#4a4539] py-0.5 text-xs sm:text-sm">
-                    {paragraph.replace('- ', '• ')}
-                  </p>
-                );
-              }
-              return <p key={pIdx}>{paragraph}</p>;
-            })}
-          </div>
+          {/* Article Content - Handles HTML Rich Text (MS Word / TipTap) & Markdown */}
+          {blog.content.includes('<') ? (
+            <div
+              className="prose prose-invert max-w-none text-sm text-[#b8b3a7] leading-relaxed space-y-4 [&_h1]:text-2xl [&_h1]:font-serif [&_h1]:text-[#f3ece0] [&_h1]:my-4 [&_h2]:text-xl [&_h2]:font-serif [&_h2]:text-[#c5a059] [&_h2]:my-3 [&_h3]:text-lg [&_h3]:font-serif [&_h3]:text-[#e6dfd3] [&_h3]:my-2 [&_p]:mb-3 [&_blockquote]:border-l-2 [&_blockquote]:border-[#c5a059] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-[#bcb7ab] [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_img]:rounded-lg [&_img]:my-4 [&_img]:mx-auto [&_a]:text-[#c5a059] [&_a]:underline [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-[#332e24] [&_th]:p-2 [&_th]:bg-[#1a1710] [&_th]:text-[#c5a059] [&_td]:border [&_td]:border-[#24211a] [&_td]:p-2"
+              dangerouslySetInnerHTML={{ __html: blog.content }}
+            />
+          ) : (
+            <div className="space-y-4 text-sm text-[#b8b3a7] leading-relaxed">
+              {blog.content.split('\n\n').map((paragraph, pIdx) => {
+                if (paragraph.startsWith('### ')) {
+                  return (
+                    <h3 key={pIdx} className="font-serif text-lg text-[#f3ece0] pt-2">
+                      {paragraph.replace('### ', '')}
+                    </h3>
+                  );
+                }
+                if (
+                  paragraph.startsWith('1. ') ||
+                  paragraph.startsWith('2. ') ||
+                  paragraph.startsWith('3. ')
+                ) {
+                  return (
+                    <p
+                      key={pIdx}
+                      className="pl-4 border-l-2 border-[#c5a059]/50 py-0.5 text-xs sm:text-sm"
+                    >
+                      {paragraph}
+                    </p>
+                  );
+                }
+                if (paragraph.startsWith('- ')) {
+                  return (
+                    <p
+                      key={pIdx}
+                      className="pl-4 border-l border-[#4a4539] py-0.5 text-xs sm:text-sm"
+                    >
+                      {paragraph.replace('- ', '• ')}
+                    </p>
+                  );
+                }
+                return <p key={pIdx}>{paragraph}</p>;
+              })}
+            </div>
+          )}
 
-          {/* Tags */}
-          {blog.tags && blog.tags.length > 0 && (
-            <div className="mt-8 pt-6 border-t border-[#24211a] flex flex-wrap gap-2 items-center">
-              <span className="text-xs text-[#7d796f] flex items-center gap-1">
-                <Tag className="w-3 h-3 text-[#c5a059]" />
-                Tags:
-              </span>
-              {blog.tags.map((t, idx) => (
-                <span
-                  key={idx}
-                  className="text-[11px] px-2.5 py-1 rounded bg-[#17140f] border border-[#2e2a22] text-[#a39f93]"
-                >
-                  #{t}
-                </span>
-              ))}
+          {/* Tags & Keywords Footer */}
+          {((blog.tags && blog.tags.length > 0) || (blog.keywords && blog.keywords.length > 0)) && (
+            <div className="mt-8 pt-6 border-t border-[#24211a] space-y-3">
+              {blog.tags && blog.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 items-center">
+                  <span className="text-xs text-[#7d796f] flex items-center gap-1">
+                    <Tag className="w-3 h-3 text-[#c5a059]" />
+                    Tags:
+                  </span>
+                  {blog.tags.map((t, idx) => (
+                    <span
+                      key={idx}
+                      className="text-[11px] px-2.5 py-1 rounded bg-[#17140f] border border-[#2e2a22] text-[#a39f93]"
+                    >
+                      #{t}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {blog.keywords && blog.keywords.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 items-center">
+                  <span className="text-xs text-[#7d796f] flex items-center gap-1">
+                    🔍 SEO Keywords:
+                  </span>
+                  {blog.keywords.map((k, idx) => (
+                    <span
+                      key={idx}
+                      className="text-[10px] px-2 py-0.5 rounded bg-[#0d0c09] border border-[#26221a] text-[#8c887d]"
+                    >
+                      {k}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

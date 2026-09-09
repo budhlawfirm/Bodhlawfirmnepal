@@ -40,6 +40,84 @@ export function getSupabaseConfigInfo() {
   };
 }
 
+export const SUPABASE_STORAGE_BUCKET = 'bodh-law-media';
+
+export async function uploadImageToSupabaseStorage(
+  file: File,
+  folder: string = 'uploads'
+): Promise<{ url: string; path: string }> {
+  const supabase = getSupabaseClient();
+  if (!supabase) {
+    throw new Error('Supabase client is not connected. Please verify your URL and anon key.');
+  }
+
+  // Attempt auto-creation of storage bucket if possible
+  try {
+    const { data: buckets } = await supabase.storage.listBuckets();
+    const exists = buckets?.some((b) => b.name === SUPABASE_STORAGE_BUCKET);
+    if (!exists) {
+      await supabase.storage.createBucket(SUPABASE_STORAGE_BUCKET, { public: true });
+    }
+  } catch (e) {
+    console.warn('Storage bucket check note:', e);
+  }
+
+  // Create clean filename
+  const fileExt = file.name.split('.').pop() || 'png';
+  const cleanFileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+  const filePath = `${folder}/${cleanFileName}`;
+
+  const { data, error } = await supabase.storage
+    .from(SUPABASE_STORAGE_BUCKET)
+    .upload(filePath, file, {
+      cacheControl: '3600',
+      upsert: true
+    });
+
+  if (error) {
+    throw new Error(`Supabase Storage Upload Error: ${error.message}`);
+  }
+
+  const { data: publicUrlData } = supabase.storage
+    .from(SUPABASE_STORAGE_BUCKET)
+    .getPublicUrl(filePath);
+
+  return {
+    url: publicUrlData.publicUrl,
+    path: filePath
+  };
+}
+
+export async function listSupabaseStorageImages(folder: string = 'uploads') {
+  const supabase = getSupabaseClient();
+  if (!supabase) return [];
+
+  try {
+    const { data, error } = await supabase.storage
+      .from(SUPABASE_STORAGE_BUCKET)
+      .list(folder, { limit: 100, sortBy: { column: 'created_at', order: 'desc' } });
+
+    if (error || !data) return [];
+
+    return data.map((item) => {
+      const filePath = `${folder}/${item.name}`;
+      const { data: pubData } = supabase.storage
+        .from(SUPABASE_STORAGE_BUCKET)
+        .getPublicUrl(filePath);
+      return {
+        id: item.id || item.name,
+        name: item.name,
+        url: pubData.publicUrl,
+        createdAt: item.created_at,
+        size: item.metadata?.size
+      };
+    });
+  } catch (err) {
+    console.warn('Failed to list storage items:', err);
+    return [];
+  }
+}
+
 export const SUPABASE_SQL_SCHEMA = `-- ========================================================
 -- BODH LAW FIRM NEPAL - COMPLETE SUPABASE POSTGRES SCHEMA
 -- Run this in Supabase SQL Editor (Dashboard > SQL Editor)
@@ -93,6 +171,8 @@ create table if not exists public.blogs (
   published_date text,
   read_time text,
   tags jsonb default '[]'::jsonb,
+  keywords jsonb default '[]'::jsonb,
+  meta_description text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
@@ -129,6 +209,11 @@ create table if not exists public.site_content (
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- 8. Supabase Public Storage Bucket Setup
+insert into storage.buckets (id, name, public) 
+values ('bodh-law-media', 'bodh-law-media', true)
+on conflict (id) do update set public = true;
+
 -- Enable Row Level Security (RLS)
 alter table public.practice_areas enable row level security;
 alter table public.team_members enable row level security;
@@ -149,10 +234,15 @@ create policy "Public insert contact_inquiries" on public.contact_inquiries for 
 create policy "Public read contact_inquiries" on public.contact_inquiries for select using (true);
 create policy "Public update contact_inquiries" on public.contact_inquiries for update using (true);
 
--- Public Full Access for Demo / Admin CRUD (Can be locked down with Supabase Auth)
-create policy "Allow all operations for demo site_content" on public.site_content for all using (true) with check (true);
-create policy "Allow all operations for demo practice_areas" on public.practice_areas for all using (true) with check (true);
-create policy "Allow all operations for demo team_members" on public.team_members for all using (true) with check (true);
-create policy "Allow all operations for demo blogs" on public.blogs for all using (true) with check (true);
-create policy "Allow all operations for demo testimonials" on public.testimonials for all using (true) with check (true);
+-- Public Storage Bucket Policies
+create policy "Public Storage Read Access" on storage.objects for select using (bucket_id = 'bodh-law-media');
+create policy "Public Storage Upload Access" on storage.objects for insert with check (bucket_id = 'bodh-law-media');
+create policy "Public Storage Update Access" on storage.objects for update using (bucket_id = 'bodh-law-media');
+
+-- Public Full Access for Admin CRUD
+create policy "Allow all operations for site_content" on public.site_content for all using (true) with check (true);
+create policy "Allow all operations for practice_areas" on public.practice_areas for all using (true) with check (true);
+create policy "Allow all operations for team_members" on public.team_members for all using (true) with check (true);
+create policy "Allow all operations for blogs" on public.blogs for all using (true) with check (true);
+create policy "Allow all operations for testimonials" on public.testimonials for all using (true) with check (true);
 `;

@@ -386,7 +386,9 @@ export async function getBlogs(): Promise<BlogPost[]> {
           category: row.category,
           publishedDate: row.published_date,
           readTime: row.read_time,
-          tags: row.tags || []
+          tags: row.tags || [],
+          keywords: row.keywords || [],
+          metaDescription: row.meta_description || ''
         }));
         localStorage.setItem(KEYS.BLOGS, JSON.stringify(mapped));
         return mapped;
@@ -439,7 +441,9 @@ export async function saveBlog(blog: BlogPost): Promise<BlogPost[]> {
         category: blog.category,
         published_date: blog.publishedDate,
         read_time: blog.readTime,
-        tags: blog.tags
+        tags: blog.tags,
+        keywords: blog.keywords || [],
+        meta_description: blog.metaDescription || ''
       });
     } catch (e) {
       console.warn('Supabase upsert blog failed:', e);
@@ -554,7 +558,6 @@ export async function deleteTestimonial(id: string): Promise<Testimonial[]> {
   return updated;
 }
 
-// --- Contact Inquiries ---
 export async function getInquiries(): Promise<ContactInquiry[]> {
   const client = getSupabaseClient();
   if (client) {
@@ -593,8 +596,8 @@ export async function getInquiries(): Promise<ContactInquiry[]> {
     }
   }
 
-  localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(initialContactInquiries));
-  return initialContactInquiries;
+  // Return empty array — do NOT pollute CRM with demo data
+  return [];
 }
 
 export async function addInquiry(
@@ -678,10 +681,10 @@ export async function resetAllToDefaults(): Promise<void> {
   localStorage.setItem(KEYS.TEAM, JSON.stringify(initialTeamMembers));
   localStorage.setItem(KEYS.BLOGS, JSON.stringify(initialBlogs));
   localStorage.setItem(KEYS.TESTIMONIALS, JSON.stringify(initialTestimonials));
-  localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(initialContactInquiries));
+  localStorage.removeItem(KEYS.INQUIRIES);
 }
 
-// --- Combined Initial Loader ---
+// --- Combined Initial Loader (uses allSettled so partial failures don't break everything) ---
 export async function loadSiteData(): Promise<{
   content: SiteContent;
   practiceAreas: PracticeArea[];
@@ -690,23 +693,29 @@ export async function loadSiteData(): Promise<{
   testimonials: Testimonial[];
   inquiries: ContactInquiry[];
 }> {
-  const [content, practiceAreas, teamMembers, blogs, testimonials, inquiries] =
-    await Promise.all([
-      getSiteContent(),
-      getPracticeAreas(),
-      getTeamMembers(),
-      getBlogs(),
-      getTestimonials(),
-      getInquiries()
-    ]);
+  const [
+    contentResult,
+    practiceAreasResult,
+    teamMembersResult,
+    blogsResult,
+    testimonialsResult,
+    inquiriesResult
+  ] = await Promise.allSettled([
+    getSiteContent(),
+    getPracticeAreas(),
+    getTeamMembers(),
+    getBlogs(),
+    getTestimonials(),
+    getInquiries()
+  ]);
 
   return {
-    content,
-    practiceAreas,
-    teamMembers,
-    blogs,
-    testimonials,
-    inquiries
+    content: contentResult.status === 'fulfilled' ? contentResult.value : initialSiteContent,
+    practiceAreas: practiceAreasResult.status === 'fulfilled' ? practiceAreasResult.value : initialPracticeAreas,
+    teamMembers: teamMembersResult.status === 'fulfilled' ? teamMembersResult.value : initialTeamMembers,
+    blogs: blogsResult.status === 'fulfilled' ? blogsResult.value : initialBlogs,
+    testimonials: testimonialsResult.status === 'fulfilled' ? testimonialsResult.value : initialTestimonials,
+    inquiries: inquiriesResult.status === 'fulfilled' ? inquiriesResult.value : []
   };
 }
 

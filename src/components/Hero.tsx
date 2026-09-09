@@ -13,7 +13,6 @@ import { SiteContent } from '../types';
 
 interface HeroProps {
   content?: SiteContent['hero'];
-  heroData?: SiteContent['hero'];
   onExploreServices?: () => void;
   onContactUs?: () => void;
   onConsultNow?: () => void;
@@ -40,12 +39,11 @@ const defaultLawImages = [
 
 export const Hero: React.FC<HeroProps> = ({
   content,
-  heroData,
   onExploreServices,
   onContactUs,
   onConsultNow
 }) => {
-  const data = heroData || content || {
+  const data = content || {
     eyebrow: 'YOUR TRUST. OUR COMMITMENT.',
     title: 'Defending Rights.\nDelivering Justice.',
     subtitle:
@@ -57,10 +55,12 @@ export const Hero: React.FC<HeroProps> = ({
     slideInterval: 10
   };
 
-  // Compile active images
+  // Compile active images — admin slider images take priority, then bgImage, then defaults
   const slides = (data.sliderImages && data.sliderImages.length > 0)
     ? data.sliderImages
-    : (data.bgImage ? [data.bgImage, ...defaultLawImages.slice(1).map(d => d.url)] : defaultLawImages.map(d => d.url));
+    : data.bgImage
+      ? [data.bgImage]
+      : defaultLawImages.map(d => d.url);
 
   const intervalSeconds = data.slideInterval && data.slideInterval > 0 ? data.slideInterval : 10;
   const intervalMs = intervalSeconds * 1000;
@@ -193,8 +193,12 @@ export const Hero: React.FC<HeroProps> = ({
               <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-[#c5a059]" />
 
               <div className="flex items-center gap-3 pb-5 border-b border-white/[0.1] relative z-10">
-                <div className="w-10 h-10 rounded bg-[#18150f]/80 backdrop-blur-md border border-[#c5a059]/60 flex items-center justify-center text-[#c5a059] shadow-inner">
-                  <Scale className="w-5 h-5" />
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#c5a059]/80 shrink-0 bg-[#050505] shadow-[0_0_12px_rgba(197,160,89,0.4)]">
+                  <img
+                    src="/assets/bodh-logo.jpg"
+                    alt="Bodh Law Chambers Emblem"
+                    className="w-full h-full object-cover scale-[1.3] filter brightness-[1.35] contrast-[1.25] saturate-[1.2]"
+                  />
                 </div>
                 <div>
                   <div className="font-serif text-base sm:text-lg text-[#f3ece0] font-semibold tracking-wide">

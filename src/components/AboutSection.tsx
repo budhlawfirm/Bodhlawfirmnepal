@@ -4,7 +4,6 @@ import { SiteContent } from '../types';
 
 interface AboutSectionProps {
   content?: SiteContent['about'];
-  aboutData?: SiteContent['about'];
   onLearnMore?: () => void;
   onNavigateToTeam?: () => void;
   onConsultNow?: () => void;
@@ -12,12 +11,11 @@ interface AboutSectionProps {
 
 export const AboutSection: React.FC<AboutSectionProps> = ({
   content,
-  aboutData,
   onLearnMore,
   onNavigateToTeam,
   onConsultNow
 }) => {
-  const data = aboutData || content || {
+  const data = content || {
     eyebrow: 'ABOUT US',
     title: 'Advocates for Justice.\nPartners in Success.',
     paragraph1:

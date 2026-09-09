@@ -45,6 +45,8 @@ export interface BlogPost {
   publishedDate: string;
   readTime: string;
   tags: string[];
+  keywords?: string[];
+  metaDescription?: string;
 }
 
 export interface Testimonial {

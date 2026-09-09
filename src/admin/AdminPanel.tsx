@@ -9,11 +9,7 @@ import {
   ExternalLink,
   Eye,
   FileText,
-  HeartHandshake,
-  HelpCircle,
-  Home,
   Image as ImageIcon,
-  Layers,
   LayoutDashboard,
   LogOut,
   Mail,
@@ -127,8 +123,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8a6e34] via-[#c5a059] to-[#8a6e34]" />
 
           <div className="text-center space-y-2 pt-2">
-            <div className="w-14 h-14 rounded-full bg-[#16130b] border border-[#c5a059]/40 flex items-center justify-center text-[#c5a059] font-serif font-bold text-2xl mx-auto shadow-inner">
-              बो
+            <div className="w-20 h-20 mx-auto flex items-center justify-center" style={{ isolation: 'isolate' }}>
+              <img
+                src="/assets/bodh-logo.jpg"
+                alt="Bodh Law Firm Logo"
+                className="w-full h-full object-contain"
+                style={{ mixBlendMode: 'screen', filter: 'brightness(1.4) contrast(1.3) saturate(1.2)' }}
+              />
             </div>
             <h1 className="font-serif text-xl font-bold tracking-wide text-[#f3ece0]">
               Bodh Law Chambers
@@ -231,8 +232,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       {/* Top Header */}
       <header className="h-16 bg-[#0a0907] border-b border-[#242018] px-6 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3.5">
-          <div className="w-9 h-9 rounded bg-[#16130b] border border-[#c5a059]/40 flex items-center justify-center text-[#c5a059] font-serif font-bold text-lg">
-            बो
+          <div className="w-12 h-12 flex items-center justify-center shrink-0" style={{ isolation: 'isolate' }}>
+            <img
+              src="/assets/bodh-logo.jpg"
+              alt="Bodh Law Firm Logo"
+              className="w-full h-full object-contain"
+              style={{ mixBlendMode: 'screen', filter: 'brightness(1.4) contrast(1.3) saturate(1.2)' }}
+            />
           </div>
           <div>
             <div className="flex items-center gap-2">

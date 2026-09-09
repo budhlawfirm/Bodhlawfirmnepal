@@ -17,6 +17,7 @@ import React, { useState } from 'react';
 import { deleteBlog, saveBlog } from '../../services/storage';
 import { BlogPost } from '../../types';
 import { ImageUploadInput } from '../components/ImageUploadInput';
+import { RichTextEditor } from '../components/RichTextEditor';
 
 interface BlogsTabProps {
   blogs: BlogPost[];
@@ -42,6 +43,8 @@ export const BlogsTab: React.FC<BlogsTabProps> = ({ blogs, onRefresh }) => {
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
+  const [keywords, setKeywords] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
 
   const handleSelectBlog = (b: BlogPost) => {
     setSelectedBlog(b);
@@ -62,6 +65,8 @@ export const BlogsTab: React.FC<BlogsTabProps> = ({ blogs, onRefresh }) => {
     setExcerpt(b.excerpt);
     setContent(b.content);
     setTags(b.tags?.join(', ') || '');
+    setKeywords(b.keywords?.join(', ') || '');
+    setMetaDescription(b.metaDescription || '');
     setIsEditing(true);
     setIsCreating(false);
   };
@@ -84,6 +89,8 @@ export const BlogsTab: React.FC<BlogsTabProps> = ({ blogs, onRefresh }) => {
     setExcerpt('');
     setContent('');
     setTags('Nepal Law, Supreme Court, Precedent');
+    setKeywords('Nepal Law Firm, Advocate Kathmandu, Legal Precedents, FDI Nepal');
+    setMetaDescription('Comprehensive legal analysis on Nepal statutory frameworks and Supreme Court precedents by Bodh Law Chambers.');
     setIsCreating(true);
     setIsEditing(false);
   };
@@ -99,6 +106,10 @@ export const BlogsTab: React.FC<BlogsTabProps> = ({ blogs, onRefresh }) => {
       .split(',')
       .map((t) => t.trim())
       .filter(Boolean);
+    const keywordsArray = keywords
+      .split(',')
+      .map((k) => k.trim())
+      .filter(Boolean);
 
     const blogToSave: BlogPost = {
       id: isCreating ? `blog-${Date.now()}` : selectedBlog!.id,
@@ -113,7 +124,9 @@ export const BlogsTab: React.FC<BlogsTabProps> = ({ blogs, onRefresh }) => {
       coverImage: coverImage || 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1000&q=80',
       excerpt,
       content,
-      tags: tagsArray
+      tags: tagsArray,
+      keywords: keywordsArray,
+      metaDescription: metaDescription.trim() || excerpt.slice(0, 160)
     };
 
     await saveBlog(blogToSave);
@@ -202,7 +215,7 @@ export const BlogsTab: React.FC<BlogsTabProps> = ({ blogs, onRefresh }) => {
         {/* Selected Blog Details / Edit Form */}
         <div className="lg:col-span-8 bg-[#0c0b09] border border-[#24211a] p-6 space-y-6">
           {isEditing || isCreating ? (
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div className="flex items-center justify-between pb-3 border-b border-[#211e17]">
                 <h4 className="font-serif text-base text-[#f3ece0]">
                   {isCreating ? 'Publish New Legal Article' : `Edit: ${selectedBlog?.title}`}
@@ -274,14 +287,14 @@ export const BlogsTab: React.FC<BlogsTabProps> = ({ blogs, onRefresh }) => {
 
               {/* Cover Image Input with Curated Picker */}
               <ImageUploadInput
-                label="Article Cover Photo"
+                label="Article Cover Photo (Upload or Select)"
                 value={coverImage}
                 onChange={(url) => setCoverImage(url)}
                 categoryFilter="blogs"
-                helperText="Select legal imagery representing the article subject (e.g. courthouse, contract signing, real estate)."
+                helperText="Upload custom image or select legal imagery representing the article subject."
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-[#f3ece0] uppercase">
                     Author Name
@@ -305,24 +318,11 @@ export const BlogsTab: React.FC<BlogsTabProps> = ({ blogs, onRefresh }) => {
                     className="w-full bg-[#12100a] border border-[#2b271e] focus:border-[#c5a059] px-3 py-2 text-xs text-[#f3ece0] outline-none"
                   />
                 </div>
-
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-[#f3ece0] uppercase">
-                    Tags (Comma-separated)
-                  </label>
-                  <input
-                    type="text"
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
-                    placeholder="FDI, Nepal Rastra Bank, Industry"
-                    className="w-full bg-[#12100a] border border-[#2b271e] focus:border-[#c5a059] px-3 py-2 text-xs text-[#f3ece0] outline-none"
-                  />
-                </div>
               </div>
 
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-[#f3ece0] uppercase">
-                  Brief Abstract / Excerpt (Homepage & Card Preview)
+                  Brief Abstract / Excerpt (Card & Homepage Preview)
                 </label>
                 <textarea
                   rows={2}
@@ -333,23 +333,105 @@ export const BlogsTab: React.FC<BlogsTabProps> = ({ blogs, onRefresh }) => {
                 />
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-[#f3ece0] uppercase">
-                  Complete Legal Article Body
-                </label>
-                <textarea
-                  rows={8}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Full analysis, legal citations, statutory section references, conclusions..."
-                  className="w-full bg-[#12100a] border border-[#2b271e] focus:border-[#c5a059] px-3 py-2 text-xs text-[#f3ece0] outline-none leading-relaxed font-sans"
-                />
+              {/* MS Word Rich Text Editor for Content */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-[#c5a059] uppercase tracking-wider flex items-center gap-1.5">
+                    <FileText className="w-4 h-4" />
+                    Complete Legal Article Content (MS Word Support)
+                  </label>
+                  <span className="text-[11px] text-[#7d796f]">
+                    Copy & Paste directly from MS Word or Google Docs
+                  </span>
+                </div>
+                <RichTextEditor value={content} onChange={setContent} />
               </div>
 
-              <div className="pt-2 flex gap-3">
+              {/* SEO & Tags Section */}
+              <div className="bg-[#12100a] border border-[#26221a] p-4 rounded-lg space-y-4 mt-6">
+                <div className="text-xs font-semibold text-[#c5a059] uppercase tracking-wider flex items-center gap-1.5 border-b border-[#24211a] pb-2">
+                  <Tag className="w-4 h-4" />
+                  SEO, Keywords & Article Categorization Tags
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Article Tags */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-[#f3ece0] uppercase">
+                      Tags (Comma-separated)
+                    </label>
+                    <input
+                      type="text"
+                      value={tags}
+                      onChange={(e) => setTags(e.target.value)}
+                      placeholder="FDI, Nepal Rastra Bank, Industry, Commercial Court"
+                      className="w-full bg-[#0a0907] border border-[#2b271e] focus:border-[#c5a059] px-3 py-2 text-xs text-[#f3ece0] outline-none"
+                    />
+                    {tags && (
+                      <div className="flex flex-wrap gap-1 mt-1.5">
+                        {tags.split(',').map((t, idx) => (
+                          <span
+                            key={idx}
+                            className="text-[10px] bg-[#1a1710] border border-[#383327] text-[#c5a059] px-2 py-0.5 rounded"
+                          >
+                            #{t.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* SEO Keywords */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-[#f3ece0] uppercase">
+                      SEO Search Keywords (Comma-separated)
+                    </label>
+                    <input
+                      type="text"
+                      value={keywords}
+                      onChange={(e) => setKeywords(e.target.value)}
+                      placeholder="Advocate Kathmandu, Legal Advice Nepal, Supreme Court Precedent"
+                      className="w-full bg-[#0a0907] border border-[#2b271e] focus:border-[#c5a059] px-3 py-2 text-xs text-[#f3ece0] outline-none"
+                    />
+                    {keywords && (
+                      <div className="flex flex-wrap gap-1 mt-1.5">
+                        {keywords.split(',').map((k, idx) => (
+                          <span
+                            key={idx}
+                            className="text-[10px] bg-[#14120e] border border-[#29251d] text-[#a39f93] px-2 py-0.5 rounded"
+                          >
+                            🔍 {k.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* SEO Meta Description */}
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-semibold text-[#f3ece0] uppercase">
+                      Search Engine Meta Description
+                    </label>
+                    <span className="text-[10px] text-[#7d796f]">
+                      {metaDescription.length} / 160 recommended characters
+                    </span>
+                  </div>
+                  <textarea
+                    rows={2}
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                    placeholder="Short meta description shown in Google search results (150-160 characters)..."
+                    className="w-full bg-[#0a0907] border border-[#2b271e] focus:border-[#c5a059] px-3 py-2 text-xs text-[#f3ece0] outline-none leading-relaxed"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-3 flex gap-3">
                 <button
                   onClick={handleSaveBlog}
-                  className="inline-flex items-center gap-2 px-5 py-2 text-xs font-semibold uppercase tracking-wider bg-[#c5a059] text-black hover:bg-[#d4b050]"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-semibold uppercase tracking-wider bg-[#c5a059] text-black hover:bg-[#d4b050] transition-colors"
                 >
                   <Save className="w-4 h-4" />
                   <span>Publish Article</span>

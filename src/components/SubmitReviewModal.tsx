@@ -2,11 +2,14 @@ import {
   AlertCircle,
   Award,
   CheckCircle2,
+  Loader2,
   Star,
+  Upload,
   X
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { saveTestimonial } from '../services/storage';
+import { uploadImageToSupabaseStorage } from '../services/supabase';
 import { PracticeArea } from '../types';
 
 interface SubmitReviewModalProps {
@@ -29,11 +32,32 @@ export const SubmitReviewModal: React.FC<SubmitReviewModalProps> = ({
   );
   const [quote, setQuote] = useState('');
   const [rating, setRating] = useState(5);
+  const [clientPhoto, setClientPhoto] = useState('');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingPhoto(true);
+    setError('');
+
+    try {
+      const result = await uploadImageToSupabaseStorage(file, 'testimonials');
+      setClientPhoto(result.url);
+    } catch (err: any) {
+      console.error('Photo upload failed:', err);
+      setError('Could not upload photo to Supabase Storage.');
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +75,7 @@ export const SubmitReviewModal: React.FC<SubmitReviewModalProps> = ({
         clientName: name.trim(),
         clientTitle: title.trim() || 'Client',
         clientPhoto:
+          clientPhoto ||
           'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
         quote: quote.trim(),
         rating,
@@ -193,6 +218,45 @@ export const SubmitReviewModal: React.FC<SubmitReviewModalProps> = ({
                     General Legal Advisory
                   </option>
                 </select>
+              </div>
+
+              {/* Photo Upload (Optional) */}
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-[#9c988c] mb-1">
+                  Your Photo / Logo (Optional)
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handlePhotoUpload}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    disabled={uploadingPhoto}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-3 py-2 bg-[#1b1812] border border-[#383225] hover:border-[#c5a059] text-xs text-[#c5a059] flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                  >
+                    {uploadingPhoto ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Upload className="w-3.5 h-3.5" />
+                    )}
+                    <span>{uploadingPhoto ? 'Uploading...' : 'Upload Photo'}</span>
+                  </button>
+                  {clientPhoto && (
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={clientPhoto}
+                        alt="Client preview"
+                        className="w-7 h-7 rounded-full object-cover border border-[#c5a059]"
+                      />
+                      <span className="text-[11px] text-emerald-400 font-medium">Uploaded!</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>

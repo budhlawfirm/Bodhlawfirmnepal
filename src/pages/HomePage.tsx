@@ -63,7 +63,6 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* 1. Hero Section (Mockup 1 matching) */}
       <Hero
         content={content.hero}
-        heroData={content.hero}
         onConsultNow={() => onOpenConsultation()}
         onContactUs={() => onNavigate('contact')}
         onExploreServices={() => onNavigate('practice-areas')}
@@ -76,7 +75,6 @@ export const HomePage: React.FC<HomePageProps> = ({
       <div className="relative">
         <AboutSection
           content={content.about}
-          aboutData={content.about}
           onConsultNow={() => onOpenConsultation()}
           onLearnMore={() => onNavigate('about')}
           onNavigateToTeam={() => onNavigate('team')}

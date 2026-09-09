@@ -1,5 +1,4 @@
 import {
-  AlertCircle,
   BarChart3,
   Bot,
   CheckCircle2,
@@ -7,8 +6,6 @@ import {
   ExternalLink,
   FileText,
   Globe,
-  HelpCircle,
-  RefreshCw,
   Search,
   ShieldCheck,
   Sparkles,

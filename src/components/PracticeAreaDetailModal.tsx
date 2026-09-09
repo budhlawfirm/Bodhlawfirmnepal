@@ -80,19 +80,17 @@ export const PracticeAreaDetailModal: React.FC<PracticeAreaDetailModalProps> = (
                     <button
                       key={sub.id || idx}
                       onClick={() => setSelectedSubSection(sub)}
-                      className={`w-full text-left p-3 text-xs sm:text-sm rounded transition-all flex items-center justify-between group ${
-                        isActive
+                      className={`w-full text-left p-3 text-xs sm:text-sm rounded transition-all flex items-center justify-between group ${isActive
                           ? 'bg-[#1e1a13] text-[#c5a059] border border-[#c5a059]/40 font-medium'
                           : 'text-[#a39f93] hover:text-white hover:bg-[#14120e] border border-transparent'
-                      }`}
+                        }`}
                     >
                       <span className="truncate pr-2">{sub.title}</span>
                       <ChevronRight
-                        className={`w-4 h-4 shrink-0 transition-transform ${
-                          isActive
+                        className={`w-4 h-4 shrink-0 transition-transform ${isActive
                             ? 'text-[#c5a059] translate-x-0.5'
                             : 'text-[#4d493f] group-hover:text-[#a39f93]'
-                        }`}
+                          }`}
                       />
                     </button>
                   );
@@ -144,7 +142,7 @@ export const PracticeAreaDetailModal: React.FC<PracticeAreaDetailModalProps> = (
             <div className="pt-6 mt-8 border-t border-[#24211a] flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-2 text-xs text-[#a39f93]">
                 <Phone className="w-3.5 h-3.5 text-[#c5a059]" />
-                <span>Immediate inquiries: +977 1 590 1234</span>
+                <span>Immediate inquiries: +9779864432081</span>
               </div>
 
               <div className="flex items-center gap-3">

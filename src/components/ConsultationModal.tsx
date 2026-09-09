@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   X
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { addInquiry } from '../services/storage';
 import { ContactInfo, PracticeArea } from '../types';
 
@@ -41,6 +41,19 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+
+  // Sync practiceArea when the modal is opened with a different prefill area
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(prev => ({
+        ...prev,
+        practiceArea: initialPracticeArea || practiceAreas[0]?.title || 'General Legal Consultation'
+      }));
+      // Reset submission state when modal opens fresh
+      setSubmitted(false);
+      setError('');
+    }
+  }, [isOpen, initialPracticeArea]);
 
   if (!isOpen) return null;
 
@@ -83,14 +96,24 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
 
         {/* Modal Header */}
         <div className="p-6 border-b border-[#24211a] flex items-center justify-between bg-[#12100d]">
-          <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#c5a059]">
-              <ShieldCheck className="w-4 h-4" />
-              <span>Direct Legal Consultation</span>
+          <div className="flex items-center gap-3">
+            <div className="w-14 h-14 flex items-center justify-center shrink-0" style={{ isolation: 'isolate' }}>
+              <img
+                src="/assets/bodh-logo.jpg"
+                alt="Bodh Law Firm Logo"
+                className="w-full h-full object-contain"
+                style={{ mixBlendMode: 'screen', filter: 'brightness(1.4) contrast(1.3) saturate(1.2)' }}
+              />
             </div>
-            <h2 className="font-serif text-2xl text-[#f3ece0] font-normal mt-1">
-              Schedule with Bodh Law Firm
-            </h2>
+            <div>
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#c5a059]">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Direct Legal Consultation</span>
+              </div>
+              <h2 className="font-serif text-xl sm:text-2xl text-[#f3ece0] font-normal mt-0.5">
+                Schedule with Bodh Law Firm
+              </h2>
+            </div>
           </div>
           <button
             onClick={onClose}

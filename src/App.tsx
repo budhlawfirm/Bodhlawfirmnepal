@@ -32,7 +32,7 @@ import {
 } from "./types";
 
 export function App() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Core Data initialized with complete legal firm data
   const [content, setContent] = useState<SiteContent>(initialSiteContent);
@@ -126,6 +126,7 @@ export function App() {
 
   // Initial Load
   const fetchData = async () => {
+    setLoading(true);
     try {
       const data = await loadSiteData();
       setContent(data.content);
@@ -164,7 +165,7 @@ export function App() {
     setIsConsultationModalOpen(true);
   };
 
-  if (loading || !content) {
+  if (loading && !isAdminPortalActive) {
     return (
       <div className="min-h-screen bg-[#080808] flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -306,7 +307,10 @@ export function App() {
       {/* Consultation Request Modal */}
       <ConsultationModal
         isOpen={isConsultationModalOpen}
-        onClose={() => setIsConsultationModalOpen(false)}
+        onClose={() => {
+          setIsConsultationModalOpen(false);
+          setConsultationPrefillArea("");
+        }}
         practiceAreas={practiceAreas}
         contactInfo={content.contactInfo}
         initialPracticeArea={consultationPrefillArea}

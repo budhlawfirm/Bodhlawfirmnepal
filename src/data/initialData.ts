@@ -133,14 +133,14 @@ export const initialSiteContent: SiteContent = {
     address: "Putalisadak, Kathmandu",
     city: "Kathmandu",
     country: "Nepal",
-    phone: "+977 1 590 1234",
-    mobile: "+977 980 123 4567",
-    emergencyHotline: "+977 985 100 9999",
+    phone: "+9779864432081",
+    mobile: "+9779864432081",
+    emergencyHotline: "+9779864432081",
     email: "contact@bodhlawfirm.com.np",
     consultationEmail: "consult@bodhlawfirm.com.np",
     website: "bodhlawfirm.com.np",
-    whatsappNumber: "+9779801234567",
-    whatsappDirectUrl: "https://wa.me/9779801234567?text=Hello%20Bodh%20Law%20Firm,%20I%20would%20like%20to%20schedule%20a%20legal%20consultation.",
+    whatsappNumber: "+9779864432081",
+    whatsappDirectUrl: "https://wa.me/9779864432081?text=Hello%20Bodh%20Law%20Firm,%20I%20would%20like%20to%20schedule%20a%20legal%20consultation.",
     instagramUrl: "https://instagram.com/bodhlawfirm.nepal",
     linkedinUrl: "https://linkedin.com/company/bodh-law-firm-nepal",
     facebookUrl: "https://facebook.com/bodhlawfirm",
@@ -609,29 +609,4 @@ export const initialTestimonials: Testimonial[] = [
   }
 ];
 
-export const initialContactInquiries: ContactInquiry[] = [
-  {
-    id: "inq-1",
-    name: "Sunil Adhikari",
-    email: "sunil.adhikari@example.com",
-    phone: "+977 981 876 5432",
-    subject: "FDI Registration for Hydroelectric Investment",
-    practiceArea: "Corporate & Commercial Law",
-    message: "We are an international consortium planning a 25MW hydro project in Gandaki Province. We require advisory on DOI clearances and project loan agreements.",
-    preferredChannel: "whatsapp",
-    status: "new",
-    createdAt: "2026-09-07T14:30:00Z"
-  },
-  {
-    id: "inq-2",
-    name: "Dr. Pratima Sharma",
-    email: "dr.pratima@healthnepal.org",
-    phone: "+977 984 123 9988",
-    subject: "Trademark Infringement Notice",
-    practiceArea: "Intellectual Property Law",
-    message: "A competitor is using a deceptive copy of our medical brand logo registered with the Department of Industry. We want to initiate immediate legal action.",
-    preferredChannel: "phone",
-    status: "contacted",
-    createdAt: "2026-09-06T09:15:00Z"
-  }
-];
+export const initialContactInquiries: ContactInquiry[] = [];
