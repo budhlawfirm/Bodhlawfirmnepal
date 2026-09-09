@@ -3,10 +3,12 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
+  ExternalLink,
   Instagram,
   Mail,
   MapPin,
   MessageSquare,
+  Navigation,
   Phone,
   Send,
   ShieldCheck
@@ -389,6 +391,62 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   </div>
                 </form>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* ── LOCATION / MAP SECTION ── */}
+        <div className="mt-16">
+          {/* Label */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2.5 rounded-full bg-[#16140e] border border-[#c5a059]/30 text-[#c5a059]">
+              <Navigation className="w-4 h-4" />
+            </div>
+            <div>
+              <p className="text-[11px] tracking-[0.2em] uppercase text-[#c5a059] font-medium">
+                Find Us
+              </p>
+              <p className="text-xs text-[#8a8578] mt-0.5">
+                Bhawan Marg, Kathmandu, Nepal
+              </p>
+            </div>
+            <a
+              href="https://maps.app.goo.gl/hvkU3EzxsovriDNK7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-auto flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#c5a059] border border-[#c5a059]/40 hover:bg-[#c5a059]/10 px-4 py-2 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              Get Directions
+            </a>
+          </div>
+
+          {/* Map Wrapper */}
+          <div className="relative border border-[#2e2a22] overflow-hidden" style={{ height: '420px' }}>
+            {/* Gold accent bar on top */}
+            <div className="h-1 bg-gradient-to-r from-[#997a38] via-[#c5a059] to-[#997a38] absolute top-0 left-0 right-0 z-10" />
+
+            <iframe
+              src={contactInfo.mapEmbedUrl}
+              width="100%"
+              height="100%"
+              style={{ border: 0, filter: 'grayscale(40%) contrast(1.05) brightness(0.9)' }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Bodh Law Firm Nepal – Office Location"
+            />
+
+            {/* Bottom overlay bar */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0c0b09]/95 to-transparent px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 z-10">
+              <div className="flex items-center gap-2 text-xs text-[#f3ece0]">
+                <MapPin className="w-4 h-4 text-[#c5a059] shrink-0" />
+                <span className="font-medium">{contactInfo.address}, {contactInfo.city}, {contactInfo.country}</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-[#8a8578]">
+                <Clock className="w-3.5 h-3.5 text-[#c5a059] shrink-0" />
+                <span>{contactInfo.workingHours}</span>
+              </div>
             </div>
           </div>
         </div>

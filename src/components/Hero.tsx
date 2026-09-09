@@ -81,8 +81,8 @@ export const Hero: React.FC<HeroProps> = ({
     };
   }, [slides.length, intervalMs]);
 
-  const handleConsult = onConsultNow || onContactUs || (() => {});
-  const handleExplore = onExploreServices || (() => {});
+  const handleConsult = onConsultNow || onContactUs || (() => { });
+  const handleExplore = onExploreServices || (() => { });
 
   return (
     <section
@@ -94,17 +94,15 @@ export const Hero: React.FC<HeroProps> = ({
         {slides.map((slideUrl, idx) => (
           <div
             key={idx}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              currentSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${currentSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
           >
             <img
               src={slideUrl}
               alt={`Law Chambers Hero Slide ${idx + 1}`}
               referrerPolicy="no-referrer"
-              className={`w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.15] transition-transform duration-[10000ms] ease-out ${
-                currentSlide === idx ? 'scale-105' : 'scale-100'
-              }`}
+              className={`w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.15] transition-transform duration-[10000ms] ease-out ${currentSlide === idx ? 'scale-105' : 'scale-100'
+                }`}
             />
           </div>
         ))}
@@ -195,7 +193,7 @@ export const Hero: React.FC<HeroProps> = ({
               <div className="flex items-center gap-3 pb-5 border-b border-white/[0.1] relative z-10">
                 <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#c5a059]/80 shrink-0 bg-[#050505] shadow-[0_0_12px_rgba(197,160,89,0.4)]">
                   <img
-                    src="/assets/bodh-logo.jpg"
+                    src="/assets/logo2.png"
                     alt="Bodh Law Chambers Emblem"
                     className="w-full h-full object-cover scale-[1.3] filter brightness-[1.35] contrast-[1.25] saturate-[1.2]"
                   />

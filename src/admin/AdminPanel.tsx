@@ -125,7 +125,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           <div className="text-center space-y-2 pt-2">
             <div className="w-20 h-20 mx-auto flex items-center justify-center" style={{ isolation: 'isolate' }}>
               <img
-                src="/assets/bodh-logo.jpg"
+                src="/assets/bodh-logo.png"
                 alt="Bodh Law Firm Logo"
                 className="w-full h-full object-contain"
                 style={{ mixBlendMode: 'screen', filter: 'brightness(1.4) contrast(1.3) saturate(1.2)' }}
@@ -234,7 +234,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         <div className="flex items-center gap-3.5">
           <div className="w-12 h-12 flex items-center justify-center shrink-0" style={{ isolation: 'isolate' }}>
             <img
-              src="/assets/bodh-logo.jpg"
+              src="/assets/bodh-logo.png"
               alt="Bodh Law Firm Logo"
               className="w-full h-full object-contain"
               style={{ mixBlendMode: 'screen', filter: 'brightness(1.4) contrast(1.3) saturate(1.2)' }}
@@ -259,9 +259,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           {/* Cloud Sync Status Indicator */}
           <div className="hidden md:flex items-center gap-2 text-xs px-3 py-1 bg-[#12100a] border border-[#242018]">
             <span
-              className={`w-2 h-2 rounded-full ${
-                configInfo.isConfigured ? 'bg-emerald-400' : 'bg-amber-400'
-              }`}
+              className={`w-2 h-2 rounded-full ${configInfo.isConfigured ? 'bg-emerald-400' : 'bg-amber-400'
+                }`}
             />
             <span className="text-[#8c887d]">
               {configInfo.isConfigured ? 'Supabase Sync Active' : 'Local Storage Mode'}
@@ -321,11 +320,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id as any)}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 text-xs font-medium transition-all text-left ${
-                    isActive
+                  className={`w-full flex items-center justify-between px-3 py-2.5 text-xs font-medium transition-all text-left ${isActive
                       ? 'bg-[#18150f] text-[#c5a059] border-l-2 border-[#c5a059] font-semibold'
                       : 'text-[#8c887d] hover:bg-[#12100a] hover:text-[#f3ece0]'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <Icon className={`w-4 h-4 ${isActive ? 'text-[#c5a059]' : 'text-[#6e6a60]'}`} />
@@ -333,11 +331,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </div>
                   {item.badge && (
                     <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
-                        item.badge.includes('New')
+                      className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${item.badge.includes('New')
                           ? 'bg-amber-500/20 text-amber-300 font-bold'
                           : 'bg-[#1a1711] text-[#7d796e]'
-                      }`}
+                        }`}
                     >
                       {item.badge}
                     </span>
@@ -489,11 +486,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           </div>
                         </div>
                         <span
-                          className={`text-[10px] px-2 py-0.5 uppercase tracking-wider border ${
-                            inq.status === 'new'
+                          className={`text-[10px] px-2 py-0.5 uppercase tracking-wider border ${inq.status === 'new'
                               ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
                               : 'bg-[#18150f] text-[#8c887d] border-[#2b271e]'
-                          }`}
+                            }`}
                         >
                           {inq.status}
                         </span>

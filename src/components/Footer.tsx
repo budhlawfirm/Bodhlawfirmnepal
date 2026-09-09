@@ -52,15 +52,6 @@ export const Footer: React.FC<FooterProps> = ({
                 <span className="text-xs font-bold font-serif">f</span>
               </a>
 
-              <a
-                href={contactInfo.linkedinUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-[#12100d] border border-[#2e2a22] flex items-center justify-center hover:border-[#c5a059] hover:text-[#c5a059] transition-colors"
-                title="LinkedIn"
-              >
-                <span className="text-xs font-bold">in</span>
-              </a>
 
               <a
                 href={contactInfo.instagramUrl}

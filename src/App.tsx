@@ -56,9 +56,13 @@ export function App() {
     "faqs",
     "admin",
   ];
+
   const getInitialPage = () => {
-    const hash = window.location.hash.replace("#", "");
-    return validPages.includes(hash) ? hash : "home";
+    const path = window.location.pathname.replace(/^\//, "").toLowerCase().replace(/\/$/, "");
+    const hash = window.location.hash.replace("#", "").toLowerCase();
+    if (validPages.includes(path)) return path;
+    if (validPages.includes(hash)) return hash;
+    return "home";
   };
 
   const initialPage = getInitialPage();
@@ -66,11 +70,11 @@ export function App() {
     initialPage === "admin" ? "home" : initialPage,
   );
 
-  // Subdomain and path detection for dedicated admin.bodhlawfirm.com.np portal
+  // Subdomain and path detection for dedicated admin portal
   const checkIsAdminSubdomain = () => {
     const host = window.location.hostname.toLowerCase();
     const hash = window.location.hash.toLowerCase();
-    const pathname = window.location.pathname.toLowerCase();
+    const pathname = window.location.pathname.toLowerCase().replace(/\/$/, "");
     const search = window.location.search.toLowerCase();
     return (
       host === "admin.bodhlawfirm.com.np" ||
@@ -93,15 +97,18 @@ export function App() {
     useState<string>("");
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  // Synchronize hash & listen for partner shortcut (Ctrl+Shift+A)
+  // Synchronize route URL paths & listen for partner shortcut (Ctrl+Shift+A)
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace("#", "");
-      if (hash === "admin") {
+    const syncRouteFromUrl = () => {
+      const path = window.location.pathname.replace(/^\//, "").toLowerCase().replace(/\/$/, "");
+      const hash = window.location.hash.replace("#", "").toLowerCase();
+      const route = validPages.includes(path) ? path : validPages.includes(hash) ? hash : "home";
+
+      if (route === "admin" || checkIsAdminSubdomain()) {
         setIsAdminPortalActive(true);
-      } else if (validPages.includes(hash)) {
+      } else {
         setIsAdminPortalActive(false);
-        setActiveSection(hash);
+        setActiveSection(route);
       }
     };
 
@@ -112,17 +119,24 @@ export function App() {
         (e.altKey && e.key.toLowerCase() === "a")
       ) {
         e.preventDefault();
-        setIsAdminPortalActive((prev) => !prev);
+        setIsAdminPortalActive((prev) => {
+          const nextState = !prev;
+          const newPath = nextState ? "/admin" : activeSection === "home" ? "/" : `/${activeSection}`;
+          window.history.pushState(null, "", newPath);
+          return nextState;
+        });
       }
     };
 
-    window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener("popstate", syncRouteFromUrl);
+    window.addEventListener("hashchange", syncRouteFromUrl);
     window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("popstate", syncRouteFromUrl);
+      window.removeEventListener("hashchange", syncRouteFromUrl);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [activeSection]);
 
   // Initial Load
   const fetchData = async () => {
@@ -148,8 +162,15 @@ export function App() {
 
   const handleNavigate = (pageId: string) => {
     const target = validPages.includes(pageId) ? pageId : "home";
-    setActiveSection(target);
-    window.location.hash = target;
+    if (target === "admin") {
+      setIsAdminPortalActive(true);
+      window.history.pushState(null, "", "/admin");
+    } else {
+      setIsAdminPortalActive(false);
+      setActiveSection(target);
+      const newPath = target === "home" ? "/" : `/${target}`;
+      window.history.pushState(null, "", newPath);
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -197,9 +218,8 @@ export function App() {
             window.location.href = "https://bodhlawfirm.com.np";
           } else {
             setIsAdminPortalActive(false);
-            if (window.location.hash === "#admin") {
-              window.location.hash = activeSection;
-            }
+            const newPath = activeSection === "home" ? "/" : `/${activeSection}`;
+            window.history.pushState(null, "", newPath);
           }
         }}
       />
@@ -212,7 +232,12 @@ export function App() {
       <div>
         <Navbar
           activeSection={activeSection}
+          practiceAreas={practiceAreas}
           onNavigate={handleNavigate}
+          onSelectPracticeArea={(area) => {
+            setSelectedPracticeArea(area);
+            handleNavigate("practice-areas");
+          }}
           onOpenConsultationModal={() => handleOpenConsultation()}
           contactInfo={content.contactInfo}
         />

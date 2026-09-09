@@ -54,7 +54,7 @@ export const BodhLogo: React.FC<BodhLogoProps> = ({
         style={{ isolation: 'isolate' }}
       >
         <img
-          src="/assets/bodh-logo.jpg"
+          src="/assets/bodh-logo.png"
           alt="Bodh Law Firm Nepal Official Logo"
           className="w-full h-full object-contain"
           style={{

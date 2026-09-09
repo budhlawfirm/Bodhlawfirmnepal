@@ -112,52 +112,10 @@ export const PracticeAreasPage: React.FC<PracticeAreasPageProps> = ({
 
   return (
     <div className="animate-in fade-in duration-300">
-      {/* Header Banner */}
-      <section className="relative py-20 bg-[#060606] border-b border-[#24211a] overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#c5a059_1px,transparent_1px)] [background-size:20px_20px]" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
-          <nav className="flex items-center gap-2 text-xs text-[#8c887d] mb-4">
-            <button
-              onClick={() => onNavigate('home')}
-              className="hover:text-[#c5a059] transition-colors"
-            >
-              Home
-            </button>
-            <span>/</span>
-            <span className="text-[#c5a059]">Practice Areas</span>
-          </nav>
-
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-[#c5a059] font-medium mb-3">
-                COMPREHENSIVE LEGAL SERVICES IN NEPAL
-              </p>
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#f3ece0] font-normal tracking-tight">
-                Practice Areas & Dynamic Sub-sections
-              </h1>
-              <p className="text-sm sm:text-base text-[#bcb7ab] max-w-2xl mt-4 leading-relaxed">
-                Full-spectrum legal representation spanning corporate compliance, complex litigation, cross-border banking, property disputes, and intellectual property protection.
-              </p>
-            </div>
-
-            {/* Dynamic Counter Pill */}
-            <div className="bg-[#12100a] border border-[#c5a059]/40 p-4 rounded shrink-0">
-              <div className="flex items-center gap-3">
-                <Layers className="w-8 h-8 text-[#c5a059]" />
-                <div>
-                  <div className="text-xl font-serif text-[#f3ece0] font-bold">
-                    {practiceAreas.length} Practice Areas
-                  </div>
-                  <div className="text-[11px] text-[#a39f93]">
-                    {totalSubSections} Specialized Sub-sections
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Search & Filter Controls */}
-          <div className="mt-10 pt-8 border-t border-[#1f1b15] flex flex-col sm:flex-row gap-4 justify-between items-center">
+      {/* Search & Filter Header Section */}
+      <section className="py-8 bg-[#060606] border-b border-[#24211a]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
             {/* Search Bar */}
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 text-[#7d796f] absolute left-3 top-1/2 -translate-y-1/2" />

@@ -99,7 +99,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
           <div className="flex items-center gap-3">
             <div className="w-14 h-14 flex items-center justify-center shrink-0" style={{ isolation: 'isolate' }}>
               <img
-                src="/assets/bodh-logo.jpg"
+                src="/assets/bodh-logo.png"
                 alt="Bodh Law Firm Logo"
                 className="w-full h-full object-contain"
                 style={{ mixBlendMode: 'screen', filter: 'brightness(1.4) contrast(1.3) saturate(1.2)' }}
